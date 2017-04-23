@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import windowApi from './window-api.jsx';
+import windowApi from './window-api.js';
 
 const domEvents = ['scroll', 'touchstart', 'touchmove', 'touchend'];
 

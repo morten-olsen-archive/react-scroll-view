@@ -1,5 +1,5 @@
-import iCreateScrollContainer from './create-scroll-container.jsx';
-import iWithScrollApi from './with-scroll-api.jsx';
+import iCreateScrollContainer from './create-scroll-container.js';
+import iWithScrollApi from './with-scroll-api.js';
 
 export const createScrollContainer = iCreateScrollContainer;
 export const withScrollApi = iWithScrollApi;
