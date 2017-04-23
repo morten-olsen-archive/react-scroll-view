@@ -29,7 +29,7 @@
     "webpack-dev-server": "^2.4.2"
   },
   "scripts": {
-    "prepush": "yarn build:demo && yarn build:lib",
+    "precommit": "yarn build:demo && yarn build:lib",
     "dev": "webpack-dev-server --config ./demo/webpack.config.js",
     "build:demo": "webpack --config ./demo/webpack.config.js",
     "build:lib": "babel src -d lib"
