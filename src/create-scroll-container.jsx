@@ -46,6 +46,7 @@ const scrollContainer = ({
         scrollTo: this.scrollTo,
         getScrollContainer: this.getScrollContainer,
         parent: this.context.scroll || windowApi,
+        reverse,
       },
     };
   }
