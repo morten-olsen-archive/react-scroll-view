@@ -54,24 +54,22 @@ const scrollContainer = ({
     if (reverse) {
       const node = this.getScrollContainer();
       this.scrollTo(node.scrollHeight);
+      this.observer = new global.MutationObserver(() => {
+        const distanceToEnd = this.getDistanceToBottom();
+        const diff = distanceToEnd - this.distanceToEnd;
+        node.scrollTop += diff;
+        this.distanceToEnd = distanceToEnd;
+      });
+      const config = {
+        attributes: true,
+        childList: true,
+        characterData: true,
+        subtree: true,
+      };
+      this.observer.observe(node, config);
     }
     this.addEventListener('scroll', this.handleAtEnd);
   }
-
-  /* shouldComponentUpdate() {
-    if (reverse) {
-      const node = this.getScrollContainer();
-      this.distanceToBottom = this.getDistanceToBottom();
-    }
-    return true;
-  }
-
-  componentDidUpdate() {
-    if (reverse) {
-      const node = this.getScrollContainer();
-      node.scrollTop = node.scrollHeight - this.distanceToBottom;
-    }
-  } */
 
   componentWillUnmount() {
     this.isUnmounted = true;
@@ -83,6 +81,7 @@ const scrollContainer = ({
         }
       });
     }
+    this.observer.disconnect();
   }
 
   onDomEvent(event) {
@@ -93,11 +92,9 @@ const scrollContainer = ({
 
   addEventListener(event, callback) {
     if (this.isUnmounted) return;
-    if (!this.listeners[event]) {
-      if (domEvents.includes(event)) {
-        const container = ReactDOM.findDOMNode(this);
-        container.addEventListener(event, this.onDomEvent);
-      }
+    if (domEvents.includes(event)) {
+      const container = ReactDOM.findDOMNode(this);
+      container.addEventListener(event, this.onDomEvent);
     }
     this.getListeners(event).push(callback);
   }
@@ -147,11 +144,25 @@ const scrollContainer = ({
     return actualEnd - currentLocation;
   }
 
+  getDistanceToTop() {
+    const node = this.getScrollContainer();
+    return node.scrollTop;
+  }
+
+  getDistanceToEnd() {
+    if (reverse) {
+      return this.getDistanceToTop();
+    } else {
+      return this.getDistanceToBottom();
+    }
+  }
+
   handleAtEnd() {
     const { endTriggerDistance } = this.props;
-    const distanceToEnd = this.getDistanceToBottom();
+    const distanceToEnd = this.getDistanceToEnd();
+    this.distanceToEnd = this.getDistanceToBottom();
     if (!this.atTheEnd) {
-      if (distanceToEnd < endTriggerDistance) {
+      if (distanceToEnd <= endTriggerDistance) {
         this.triggerEvent('onend', {});
         this.atTheEnd = true;
       }

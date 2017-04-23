@@ -3,13 +3,13 @@ import ReactDOM from 'react-dom';
 
 import { createScrollContainer, withScrollApi } from '../src/main';
 
-const renderItem = (item, index) => (
+const renderItem = (item) => (
   <div
     style={{
       height: 40,
     }}
   >
-    {index}
+    item: {item}
   </div>
 );
 
@@ -24,13 +24,16 @@ const ScrollElm = withScrollApi(class ScrollElement extends Component {
   componentWillMount() {
     const { scroll } = this.props;
     this.run();
+    scroll.addEventListener('onend', () => {
+      console.log('at the end');
+    });
   }
 
   run() {
     setTimeout(() => {
       const items = new Array(3).fill(undefined);
       this.setState({
-        items: [...this.state.items, ...items]
+        items: [...items, ...this.state.items],
       }, () => {
         this.run();
       });
@@ -38,13 +41,15 @@ const ScrollElm = withScrollApi(class ScrollElement extends Component {
   }
 
   render() {
+    const items = this.state.items.map((a, i) => i);
+    items.reverse();
     return (
       <div style={{ minHeight: '100%' }}>
-        {this.state.items.map(renderItem)}
+        {items.map(renderItem)}
       </div>
     );
   }
-})
+});
 
 const Wrapper = createScrollContainer({ reverse: true })(({ children }) => (
   <div
