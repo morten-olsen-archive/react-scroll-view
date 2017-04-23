@@ -10364,7 +10364,8 @@ var scrollContainer = function scrollContainer() {
               removeEventListener: this.removeEventListener,
               scrollTo: this.scrollTo,
               getScrollContainer: this.getScrollContainer,
-              parent: this.context.scroll || _windowApi2.default
+              parent: this.context.scroll || _windowApi2.default,
+              reverse: reverse
             }
           };
         }
