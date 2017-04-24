@@ -24,4 +24,6 @@ windowApi.addEventListener('scroll', handleAtEnd);
 export default windowApi.getPublicApi({
   scrollToStart: windowApi.scrollToTop,
   scrollToEnd: windowApi.scrollToBottom,
+  getDistanceToStart: windowApi.getDistanceToTop,
+  getDistanceToEnd: windowApi.getDistanceToBottom,
 });

@@ -6761,7 +6761,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var defaultDomEvents = ['scroll', 'touchstart', 'touchmove', 'touchend'];
-var publicApi = ['addEventListener', 'removeEventListener', 'triggerEvent', 'getScrollContainer', 'scrollToTop', 'scrollToBottom'];
+var publicApi = ['addEventListener', 'removeEventListener', 'triggerEvent', 'getScrollContainer', 'scrollToTop', 'scrollToBottom', 'getDistanceToBottom', 'getDistanceToTop'];
 var bindedApi = ['handleDomEvent'];
 
 var ScrollApi = function () {
@@ -6803,7 +6803,7 @@ var ScrollApi = function () {
     value: function getEvents(name) {
       if (!this.listeners[name]) {
         this.listeners[name] = [];
-        if (this.domEvents.includes(name)) {
+        if (this.element && this.domEvents.includes(name)) {
           this.element.addEventListener(name, this.handleDomEvent);
         }
       }
@@ -6942,7 +6942,9 @@ windowApi.addEventListener('scroll', handleAtEnd);
 
 exports.default = windowApi.getPublicApi({
   scrollToStart: windowApi.scrollToTop,
-  scrollToEnd: windowApi.scrollToBottom
+  scrollToEnd: windowApi.scrollToBottom,
+  getDistanceToStart: windowApi.getDistanceToTop,
+  getDistanceToEnd: windowApi.getDistanceToBottom
 });
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(33)))
 
@@ -10516,6 +10518,8 @@ var scrollContainer = function scrollContainer() {
         _this.scrollToStart = _this.scrollToStart.bind(_this);
         _this.scrollToEnd = _this.scrollToEnd.bind(_this);
         _this.handleAtEnd = _this.handleAtEnd.bind(_this);
+        _this.getDistanceToStart = _this.getDistanceToStart.bind(_this);
+        _this.getDistanceToEnd = _this.getDistanceToEnd.bind(_this);
         return _this;
       }
 
@@ -10526,7 +10530,10 @@ var scrollContainer = function scrollContainer() {
             scroll: this.api.getPublicApi({
               scrollToStart: this.scrollToStart,
               scrollToEnd: this.scrollToEnd,
-              parent: this.context.scroll || _windowApi2.default
+              getDistanceToEnd: this.getDistanceToEnd,
+              getDistanceToStart: this.getDistanceToStart,
+              parent: this.context.scroll || _windowApi2.default,
+              reverse: reverse
             })
           };
         }
@@ -10600,14 +10607,14 @@ var scrollContainer = function scrollContainer() {
         }
       }, {
         key: 'handleAtEnd',
-        value: function handleAtEnd() {
+        value: function handleAtEnd(evt) {
           var endTriggerDistance = this.props.endTriggerDistance;
 
           var distanceToEnd = this.getDistanceToEnd();
           this.distanceToEnd = this.api.getDistanceToBottom();
           if (!this.atTheEnd) {
             if (distanceToEnd <= endTriggerDistance) {
-              this.api.triggerEvent('onend', {});
+              this.api.triggerEvent('onend', evt);
               this.atTheEnd = true;
             }
           } else if (distanceToEnd > endTriggerDistance) {

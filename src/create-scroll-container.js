@@ -31,6 +31,8 @@ const scrollContainer = ({
     this.scrollToStart = this.scrollToStart.bind(this);
     this.scrollToEnd = this.scrollToEnd.bind(this);
     this.handleAtEnd = this.handleAtEnd.bind(this);
+    this.getDistanceToStart = this.getDistanceToStart.bind(this);
+    this.getDistanceToEnd = this.getDistanceToEnd.bind(this);
   }
 
   getChildContext() {
@@ -38,7 +40,10 @@ const scrollContainer = ({
       scroll: this.api.getPublicApi({
         scrollToStart: this.scrollToStart,
         scrollToEnd: this.scrollToEnd,
+        getDistanceToEnd: this.getDistanceToEnd,
+        getDistanceToStart: this.getDistanceToStart,
         parent: this.context.scroll || windowApi,
+        reverse,
       }),
     };
   }
@@ -103,13 +108,13 @@ const scrollContainer = ({
     }
   }
 
-  handleAtEnd() {
+  handleAtEnd(evt) {
     const { endTriggerDistance } = this.props;
     const distanceToEnd = this.getDistanceToEnd();
     this.distanceToEnd = this.api.getDistanceToBottom();
     if (!this.atTheEnd) {
       if (distanceToEnd <= endTriggerDistance) {
-        this.api.triggerEvent('onend', {});
+        this.api.triggerEvent('onend', evt);
         this.atTheEnd = true;
       }
     } else if (distanceToEnd > endTriggerDistance) {

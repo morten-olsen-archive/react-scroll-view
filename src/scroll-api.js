@@ -6,6 +6,8 @@ const publicApi = [
   'getScrollContainer',
   'scrollToTop',
   'scrollToBottom',
+  'getDistanceToBottom',
+  'getDistanceToTop',
 ];
 const bindedApi = [
   'handleDomEvent',
@@ -39,7 +41,7 @@ class ScrollApi {
   getEvents(name) {
     if (!this.listeners[name]) {
       this.listeners[name] = [];
-      if (this.domEvents.includes(name)) {
+      if (this.element && this.domEvents.includes(name)) {
         this.element.addEventListener(name, this.handleDomEvent);
       }
     }
