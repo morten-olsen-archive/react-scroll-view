@@ -1,19 +1,27 @@
-class WindowApi {
-  getScrollContainer() {
-    return global;
-  }
-  addEventListener(name, fn) {
-    global.window.addEventListener(name, fn);
-  }
+import ScrollApi from './scroll-api.js';
 
-  removeEventListener(name, fn) {
-    global.window.removeEventListener(name, fn);
+const windowApi = new ScrollApi({
+  element: global.document.body,
+});
+let atTheEnd = false;
+const handleAtEnd = () => {
+  const distanceToEnd = windowApi.getDistanceToBottom(global.window.innerHeight);
+  if (!atTheEnd) {
+    if (distanceToEnd <= 0) {
+      windowApi.triggerEvent('onend', {});
+      atTheEnd = true;
+    }
+  } else if (distanceToEnd > 0) {
+    atTheEnd = false;
   }
+};
+global.document.addEventListener('scroll', (evt) => {
+  windowApi.triggerEvent('scroll', evt);
+});
+windowApi.addEventListener('scroll', handleAtEnd);
 
-  scrollTo(x, y) {
-    global.window.scrollTop = y;
-    global.window.scrollLeft = x;
-  }
-}
 
-export default new WindowApi();
+export default windowApi.getPublicApi({
+  scrollToStart: windowApi.scrollToTop,
+  scrollToEnd: windowApi.scrollToBottom,
+});

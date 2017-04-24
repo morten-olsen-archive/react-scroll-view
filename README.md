@@ -30,7 +30,7 @@ export default withScrollApi(class Child extends Component {
   }
   componentDidMount() {
     const { scroll } = this.props;
-    scroll.addEventListener('atend', () => {
+    scroll.addEventListener('onend', () => {
       this.setState({
         atEnd: true,
       })

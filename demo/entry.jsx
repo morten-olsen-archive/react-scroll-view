@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 
-import { createScrollContainer, withScrollApi } from '../src/main';
+import { createScrollContainer, withScrollApi, scrollApiPropType } from '../src/main';
 
-const renderItem = (item) => (
+const renderItem = item => (
   <div
     style={{
       height: 40,
@@ -14,6 +14,12 @@ const renderItem = (item) => (
 );
 
 const ScrollElm = withScrollApi(class ScrollElement extends Component {
+  static get propTypes() {
+    return {
+      scroll: scrollApiPropType.isRequired,
+    };
+  }
+
   constructor() {
     super();
     this.state = {
@@ -25,7 +31,7 @@ const ScrollElm = withScrollApi(class ScrollElement extends Component {
     const { scroll } = this.props;
     this.run();
     scroll.addEventListener('onend', () => {
-      console.log('at the end');
+      global.console.log('at the end');
     });
   }
 

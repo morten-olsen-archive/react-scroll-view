@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import errorApi from './window-api.js';
+import windowApi from './window-api.js';
 
 const scrollable = WrappedComponent => class ScrollableComponet extends Component {
   static get contextTypes() {
@@ -10,7 +10,7 @@ const scrollable = WrappedComponent => class ScrollableComponet extends Componen
   }
 
   render() {
-    return <WrappedComponent {...this.props} scroll={this.context.scroll || errorApi} />;
+    return <WrappedComponent {...this.props} scroll={this.context.scroll || windowApi} />;
   }
 };
 
