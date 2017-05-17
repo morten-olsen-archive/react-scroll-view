@@ -109,10 +109,14 @@ class ScrollApi {
   }
 
   getPublicApi(baseApi = {}) {
-    return publicApi.reduce((output, key) => {
+    const own = publicApi.reduce((output, key) => {
       output[key] = this[key];
       return output;
-    }, baseApi);
+    }, {});
+    return {
+      ...own,
+      ...baseApi,
+    };
   }
 }
 

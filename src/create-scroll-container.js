@@ -33,6 +33,7 @@ const scrollContainer = ({
     this.handleAtEnd = this.handleAtEnd.bind(this);
     this.getDistanceToStart = this.getDistanceToStart.bind(this);
     this.getDistanceToEnd = this.getDistanceToEnd.bind(this);
+    this.getScrollContainer = this.getScrollContainer.bind(this);
   }
 
   getChildContext() {
@@ -40,6 +41,7 @@ const scrollContainer = ({
       scroll: this.api.getPublicApi({
         scrollToStart: this.scrollToStart,
         scrollToEnd: this.scrollToEnd,
+        getScrollContainer: this.getScrollContainer,
         getDistanceToEnd: this.getDistanceToEnd,
         getDistanceToStart: this.getDistanceToStart,
         parent: this.context.scroll || windowApi,
@@ -73,7 +75,9 @@ const scrollContainer = ({
   componentWillUnmount() {
     this.isUnmounted = true;
     this.api.disconnectDom();
-    this.observer.disconnect();
+    if (this.observer) {
+      this.observer.disconnect();
+    }
   }
 
   scrollToStart() {
@@ -106,6 +110,10 @@ const scrollContainer = ({
     } else {
       return this.api.getDistanceToTop();
     }
+  }
+
+  getScrollContainer() {
+    return ReactDOM.findDOMNode(this);
   }
 
   handleAtEnd(evt) {
