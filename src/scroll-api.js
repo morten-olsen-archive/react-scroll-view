@@ -8,6 +8,8 @@ const publicApi = [
   'scrollToBottom',
   'getDistanceToBottom',
   'getDistanceToTop',
+  'enableScroll',
+  'disableScroll',
 ];
 const bindedApi = [
   'handleDomEvent',
@@ -55,6 +57,22 @@ class ScrollApi {
           this.element.removeEventListener(name, this.handleDomEvent);
         }
       });
+    }
+  }
+
+  disableScroll() {
+    if (this.element && !this.disableScrollData) {
+      this.disableScrollData = {
+        overflow: this.element.style.overflow,
+      };
+      this.element.style.overflow = 'hidden';
+    }
+  }
+
+  enableScroll() {
+    if (this.element && this.disableScrollData) {
+      this.element.style.overflow = this.disableScrollData.overflow;
+      this.disableScrollData = undefined;
     }
   }
 
