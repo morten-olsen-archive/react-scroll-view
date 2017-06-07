@@ -99,7 +99,10 @@ class ScrollApi {
   }
 
   removeEventListener(name, fn) {
-    this.getEvents(name).remove(fn);
+    if (this.listeners[name]) {
+      this.listeners[name] =
+        this.listeners[name].filter(listener => listener !== fn);
+    }
   }
 
   triggerEvent(name, evt) {

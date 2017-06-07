@@ -1,6 +1,6 @@
 {
   "name": "react-scroll-view",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "main": "./lib/main.js",
   "peerDependencies": {
     "prop-types": "^15.5.8",
