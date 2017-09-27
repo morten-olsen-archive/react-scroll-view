@@ -2,13 +2,13 @@ import ScrollApi from './scroll-api.js';
 
 const windowApi = new ScrollApi();
 if (global.document) {
-  windowApi.setDomElement(global.document.body);
+  windowApi.setDomElement(global.document.documentElement, global.document.body);
   let atTheEnd = false;
   const handleAtEnd = () => {
     const distanceToEnd = windowApi.getDistanceToBottom(global.window.innerHeight);
     if (!atTheEnd) {
       if (distanceToEnd <= 0) {
-        windowApi.triggerEvent('onend', {});
+        windowApi.triggerEvent('end', {});
         atTheEnd = true;
       }
     } else if (distanceToEnd > 0) {
