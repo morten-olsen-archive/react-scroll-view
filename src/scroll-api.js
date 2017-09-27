@@ -31,11 +31,12 @@ class ScrollApi {
     });
   }
 
-  setDomElement(element) {
+  setDomElement(element, domEventDispatcher) {
     this.element = element;
+    this.domEventDispatcher = domEventDispatcher || element;
     Object.keys(this.listeners).forEach((name) => {
       if (this.domEvents.includes(name)) {
-        this.element.addEventListener(name, this.handleDomEvent);
+        this.domEventDispatcher.addEventListener(name, this.handleDomEvent);
       }
     });
   }
@@ -44,7 +45,7 @@ class ScrollApi {
     if (!this.listeners[name]) {
       this.listeners[name] = [];
       if (this.element && this.domEvents.includes(name)) {
-        this.element.addEventListener(name, this.handleDomEvent);
+        this.domEventDispatcher.addEventListener(name, this.handleDomEvent);
       }
     }
     return this.listeners[name];
@@ -54,7 +55,7 @@ class ScrollApi {
     if (this.element) {
       Object.keys(this.listeners).forEach((name) => {
         if (this.domEvents.includes(name)) {
-          this.element.removeEventListener(name, this.handleDomEvent);
+          this.domEventDispatcher.removeEventListener(name, this.handleDomEvent);
         }
       });
     }
